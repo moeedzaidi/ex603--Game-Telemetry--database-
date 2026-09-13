@@ -1,3 +1,6 @@
+Task 1.1: Define the relation schema
+
+
 Relation Schema — Game Telemetry
 1. Players
 
