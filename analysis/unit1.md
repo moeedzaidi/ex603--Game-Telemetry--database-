@@ -1,0 +1,22 @@
+Task 1.4 — Modeling Justification and Reflection
+Modelling Justification
+
+The Game Telemetry platform is designed to store information about players, matches, player participation, and game modes. The main goal of the model is to support questions such as which players participated in a match, what scores they achieved, how many players a match can support, and which game modes are associated with each match. The schema separates these different types of information into five relations: players, matches, match_participants, game_modes, and match_modes.
+
+Each main entity uses a primary key to provide a stable and unique identifier. players uses player_id, matches uses match_id, and game_modes uses game_mode_id. These identifiers are preferable to display names because names are not guaranteed to be unique or permanent. For example, two players may have similar display names, while a player's display name may also change. The numeric identifiers provide a reliable way for other relations to reference the correct record.
+
+The match_participants relation uses a composite primary key consisting of player_id and match_id. This design assumes that a player has one participation record for a particular match. The participation relation also stores participated_at and score, allowing the database to answer questions about when participation occurred and how players performed. The match_modes relation also uses a composite primary key, (match_id, game_mode_id), because the same match-mode association should not be stored more than once. This junction table represents the many-to-many relationship between matches and game modes.
+
+The foreign key relationships protect referential integrity. A match_participants record must reference an existing player and an existing match. Similarly, every match_modes record must reference an existing match and an existing game mode. For match_participants.player_id and match_participants.match_id, ON DELETE CASCADE is appropriate because participation records have no useful meaning after their associated player or match has been removed. The same behavior is used for match_modes.match_id, because a match's mode associations should disappear when that match is deleted. In contrast, match_modes.game_mode_id uses ON DELETE RESTRICT. A game mode should not be deleted while existing matches still reference it, because doing so could unintentionally remove valid historical associations.
+
+Several rules are enforced in the database schema rather than relying only on application code. Primary keys enforce uniqueness and prevent NULL identifiers. Foreign keys prevent references to records that do not exist. Required descriptive attributes such as player display names, match names, and game mode names should not be NULL. A CHECK constraint can also require player_capacity to be greater than zero and can prevent negative scores when the game's scoring rules do not allow them. These constraints provide a second layer of protection because data could potentially enter the database through different applications, scripts, or administrative tools.
+
+Overall, the model separates entities, relationships, and high-volume participation data so that the database can support reliable queries and future analytical work while maintaining data integrity.
+
+Reflection
+
+One reasonable alternative would be to use a separate participation_id as the primary key of match_participants instead of using the composite key (player_id, match_id). A different designer could reasonably choose this approach because a surrogate identifier can make individual participation records easier to reference from other tables and can simplify some application-level operations.
+
+I chose the composite primary key because the expected read and write pattern is centered on the relationship between a player and a match. Common queries will ask which players participated in a particular match or which matches a particular player participated in. The combination of player_id and match_id directly represents that relationship and also prevents duplicate participation records for the same player and match.
+
+This choice is especially suitable for the current model because there is no requirement for another table to reference an individual participation record. If the platform later adds events such as multiple rounds, kills, assists, or other telemetry records that need to reference a specific participation, introducing a surrogate participation_id could become a reasonable redesign.
