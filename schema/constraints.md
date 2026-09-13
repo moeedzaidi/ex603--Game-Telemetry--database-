@@ -1,3 +1,5 @@
+Task 1.3: Specify integrity constraints
+
 Integrity Constraints — Game Telemetry
 Primary Key Constraints
 
