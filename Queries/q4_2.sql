@@ -47,7 +47,6 @@ ORDER BY
 
 
 -- Task 4.2 Part C: Establish a failure-rate baseline for high-volume producers.
--- Replace the failure condition with the value confirmed from the dataset.
 
 WITH producer_summary AS (
     SELECT
@@ -55,7 +54,7 @@ WITH producer_summary AS (
         COUNT(*) AS total_events,
         SUM(
             CASE
-                WHEN /* confirmed failure condition */ THEN 1
+                WHEN disconnect_reason = 'network_timeout' THEN 1
                 ELSE 0
             END
         ) AS failure_events
