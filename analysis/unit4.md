@@ -19,3 +19,19 @@ The fourth query groups events by producer identifier and server region. This he
 ## What the aggregates hide
 
 An average conceals the distribution of individual scores: two producers can have the same average but very different patterns. A count conceals which events and players are included. A platform operations or reliability lead could use the producer breakdown to prioritize further investigation. Next, I would examine the actual failure rate by producer, the distribution of event outcomes, the number of network-timeout events, and whether the observed differences persist across regions and larger event samples.
+
+
+
+## Task 4.2 — Leadership Breakdown
+
+### Part A: Two numbers in one pass
+
+The conditional aggregation query answers two questions side by side: **How many events did each producer generate?** and **How many of those events were classified as failures?** Keeping both counts in the same result set makes it easier to compare event volume with failure volume and identify producers that may require further investigation. The failure condition must match the dataset's confirmed network-timeout classification.
+
+### Part B: Regional subtotals and platform grand total
+
+The regional director needs subtotal rows to compare event volume and total scores across server regions without reviewing individual event records. The platform grand total supports a different decision: it provides an overall reference point for judging the platform's aggregate activity, rather than the performance of any one region. The query uses grouping sets to return regional subtotals and one platform-wide total without individual detail rows. The grouping indicator identifies which row represents the grand total.
+
+### Part C: A two-step pipeline
+
+The CTE pipeline answers this question: **Among producers with at least 10 events, what is the average producer-level failure rate, and how much does that rate vary?** The first step summarizes each producer's total events and failure events. The second step filters for high-volume producers and calculates their average, minimum, and maximum failure rates. This creates a comparison baseline while reducing the influence of producers with very few events. The threshold is a practical starting point, not a guarantee of statistical reliability.
