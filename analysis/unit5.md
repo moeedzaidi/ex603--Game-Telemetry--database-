@@ -30,9 +30,9 @@ The producers excluded by the INNER JOIN are the matches
 that do not have any corresponding records in the
 match_participants table.
 
-Their match IDs are: [INSERT YOUR MATCH IDs].
+Their match IDs are: 14,15.
 
-The total number of excluded producers is: [INSERT COUNT].
+The total number of excluded producers is: 75.
 
 **2. What does it mean when a producer has no events?**
 
