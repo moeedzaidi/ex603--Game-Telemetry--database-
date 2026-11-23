@@ -241,7 +241,7 @@ See the analysis documents and SQL query files for detailed explanations and sup
 
 The final presentation demonstrates selected SQL queries, explains analytical decisions, and summarizes the important findings and recommendations.
 
-**Video:** [Add your public video link here.]
+**Video:** (https://youtu.be/Ov5PP_RdKEM)
 
 ## 10. How to Run the Project
 
