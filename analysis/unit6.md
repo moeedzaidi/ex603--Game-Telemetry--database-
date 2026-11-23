@@ -25,3 +25,23 @@ I would use RANK() because matches with the same event count should receive the 
 
 [After running the NTILE(4) query, explain how the matches were distributed across the four bands and whether any tied event counts appeared in different bands.]
 
+
+## Task 6.2: Compare Each Row to Its Neighbors
+
+### Part A: Row to Row
+
+A large positive or negative score delta indicates a significant change between consecutive events. The team should investigate whether the change reflects genuine platform activity, unusual gameplay, or a possible data-quality issue.
+
+### Part B: Cumulative and Smoothed
+
+A plain SUM returns one overall total. A running total shows how that total accumulates over time, allowing the team to see when progress increases and how close the platform is to its target.
+
+I selected a 7-row moving average because it smooths short-term variation while still showing recent changes. A smaller window reacts more quickly to individual events, while a larger window produces a smoother trend.
+
+ROWS counts physical rows, while RANGE includes rows based on the ORDER BY values and treats matching values as peers.
+
+### Part C: Where the Series Stops
+
+A gap longer than seven days indicates that no recorded participation event appeared during that interval for the selected producer.
+
+A gap alone cannot prove that the producer stopped activity. It could represent a real break in activity or missing/incomplete event records. Further investigation is needed to distinguish these possibilities.
