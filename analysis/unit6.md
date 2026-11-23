@@ -42,6 +42,30 @@ ROWS counts physical rows, while RANGE includes rows based on the ORDER BY value
 
 ### Part C: Where the Series Stops
 
+
+
+
+
+
+
+
+
+
+
+
+
+## Reflection
+
+In my Game Telemetry database, one useful reporting question is: How does each player's score compare with the average score of the match they participated in?
+
+A window function makes this question easier because it calculates the match average while keeping every individual participation event in the result. For example, `AVG(score) OVER (PARTITION BY match_id)` displays the average score for a match alongside each player's individual score, player ID, and participation timestamp.
+
+Using only `GROUP BY match_id` would calculate the average score for each match, but it would collapse all participation events into one summary row per match. I would lose the individual event details needed to identify which players scored above or below the match average.
+
+Window functions also make other reporting tasks possible, such as comparing an event's score with the previous event using `LAG()`, calculating running totals, and ranking the highest-scoring events within each match.
+
+This unit helped me understand that window functions are useful when a report needs both individual records and calculations across related records. GROUP BY is useful for summaries, while window functions preserve the detail needed for deeper analysis.
+
 A gap longer than seven days indicates that no recorded participation event appeared during that interval for the selected producer.
 
 A gap alone cannot prove that the producer stopped activity. It could represent a real break in activity or missing/incomplete event records. Further investigation is needed to distinguish these possibilities.
